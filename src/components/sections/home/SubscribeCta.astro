@@ -1,0 +1,46 @@
+---
+import SubscribeForm from '@/components/forms/SubscribeForm.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+---
+
+<section class="subscribe-cta">
+  <div class="container">
+    <div class="subscribe-cta__content">
+      <SectionTitle tone="light">Будь в курсе событий</SectionTitle>
+      <SubscribeForm />
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  .subscribe-cta {
+    margin-top: 200px;
+    padding-bottom: 200px;
+    background-image:
+      url('@/assets/images/backgrounds/cta-dog.png'),
+      url('@/assets/images/backgrounds/cta-wave.png');
+    background-size:
+      500px auto,
+      1600px auto;
+    background-repeat: no-repeat;
+    background-position:
+      top 3px right 50px,
+      top center;
+
+    @include down(lg) {
+      padding-bottom: 60px;
+      background-image: url('@/assets/images/backgrounds/cta-wave.png');
+      background-size: cover;
+    }
+  }
+
+  .subscribe-cta__content {
+    display: grid;
+    gap: 20px;
+    padding: 100px 0 0 150px;
+
+    @include down(lg) {
+      padding: 60px 0 0;
+    }
+  }
+</style>

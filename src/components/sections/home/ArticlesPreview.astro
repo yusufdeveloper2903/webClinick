@@ -1,0 +1,65 @@
+---
+import ArticleCard from '@/components/cards/ArticleCard.astro';
+import ArticleFeatureCard from '@/components/cards/ArticleFeatureCard.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+import type { Article } from '@/lib/content';
+
+interface Props {
+  articles: Article[];
+}
+
+const { articles } = Astro.props;
+const featured = articles.find((article) => article.data.featured);
+const [first, second] = articles.filter((article) => article !== featured);
+---
+
+<section class="articles-preview" id="articles">
+  <div class="container">
+    <SectionTitle>Полезные статьи</SectionTitle>
+    <ul class="articles-preview__list">
+      {first && (
+        <li>
+          <ArticleCard article={first} />
+        </li>
+      )}
+      {featured && (
+        <li class="articles-preview__featured">
+          <ArticleFeatureCard article={featured} size="compact" />
+        </li>
+      )}
+      {second && (
+        <li>
+          <ArticleCard article={second} />
+        </li>
+      )}
+    </ul>
+  </div>
+</section>
+
+<style lang="scss">
+  .articles-preview {
+    margin-top: 40px;
+  }
+
+  .articles-preview__list {
+    display: grid;
+    grid-template-columns: 250px 1fr 250px;
+    gap: 40px;
+    margin-top: 40px;
+
+    @include down(lg) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include down(md) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .articles-preview__featured {
+    @include down(lg) {
+      grid-column: 1 / -1;
+      order: -1;
+    }
+  }
+</style>

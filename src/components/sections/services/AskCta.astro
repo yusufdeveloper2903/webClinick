@@ -1,0 +1,58 @@
+---
+import QuestionForm from '@/components/forms/QuestionForm.astro';
+---
+
+<section class="ask-cta">
+  <div class="container ask-cta__inner">
+    <div class="ask-cta__heading">
+      <h2 class="ask-cta__title">Остались вопросы?</h2>
+      <p class="ask-cta__subtitle">Напишите нам</p>
+    </div>
+    <QuestionForm name="service-question" submitLabel="Задать нам вопрос" />
+  </div>
+</section>
+
+<style lang="scss">
+  .ask-cta {
+    margin-top: 200px;
+    padding-bottom: 120px;
+    background-image:
+      url('@/assets/images/backgrounds/cta-dog.png'),
+      url('@/assets/images/backgrounds/cta-wave.png');
+    background-size:
+      500px auto,
+      cover;
+    background-repeat: no-repeat;
+    background-position:
+      top 68px right 50px,
+      top center;
+
+    @include down(lg) {
+      margin-top: 100px;
+      background-image: url('@/assets/images/backgrounds/cta-wave.png');
+    }
+  }
+
+  .ask-cta__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    padding-top: 50px;
+  }
+
+  .ask-cta__heading {
+    width: 250px;
+    color: $color-white;
+  }
+
+  .ask-cta__title {
+    font-size: $font-size-h2;
+    font-weight: $font-weight-bold;
+    line-height: 1.25;
+  }
+
+  .ask-cta__subtitle {
+    font-size: 26px;
+    font-weight: $font-weight-medium;
+  }
+</style>

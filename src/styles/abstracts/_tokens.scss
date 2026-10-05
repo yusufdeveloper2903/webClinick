@@ -1,0 +1,70 @@
+@use 'sass:map';
+
+// ---------- Цвета ----------
+$color-dark: #333;
+$color-black: #000;
+$color-white: #fff;
+$color-muted: #949494;
+$color-accent: #ffbd54;
+$color-secondary: #78c0de;
+$color-link: #3d9cea;
+$color-violet: #8787da;
+
+$color-bg: #f9f8f8;
+$color-surface: $color-white;
+$color-surface-alt: #f3f3f3;
+$color-border: #e4e4e2;
+$color-overlay: rgb(255 255 255 / 70%);
+$color-feedback-bg: $color-dark;
+
+// ---------- Типографика ----------
+$font-family-base: 'Futura PT', 'Trebuchet MS', Arial, sans-serif;
+
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+$font-size-sm: 14px;
+$font-size-base: 16px;
+$font-size-lg: 18px;
+$font-size-xl: 20px;
+
+$font-size-h1: 70px;
+$font-size-h2: 48px;
+$font-size-h3: 36px;
+
+// ---------- Сетка ----------
+$container-width: 1140px;
+$container-wide-width: 1350px;
+$container-gutter: 16px;
+
+$breakpoints: (
+  sm: 576px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1200px,
+);
+
+// ---------- Прочее ----------
+$radius-sm: 3px;
+$radius-md: 5px;
+$radius-lg: 10px;
+
+$shadow-hover: 0 5px 5px #999;
+$shadow-card: 0 0 18px 2px #999;
+
+$transition-base: 0.3s ease;
+$transition-slow: 0.5s ease;
+
+$z-header: 10;
+$z-dialog: 100;
+
+@function breakpoint($name) {
+  @if not map.has-key($breakpoints, $name) {
+    @error 'Unknown breakpoint `#{$name}`. Available: #{map.keys($breakpoints)}';
+  }
+
+  @return map.get($breakpoints, $name);
+}

@@ -1,0 +1,27 @@
+---
+interface Props {
+  as?: 'h2' | 'h3';
+  align?: 'start' | 'center';
+  tone?: 'dark' | 'light';
+}
+
+const { as: Tag = 'h2', align = 'start', tone = 'dark' } = Astro.props;
+---
+
+<Tag class:list={['section-title', `section-title--${align}`, `section-title--${tone}`]}>
+  <slot />
+</Tag>
+
+<style lang="scss">
+  .section-title {
+    @include section-title;
+
+    &--center {
+      text-align: center;
+    }
+
+    &--light {
+      color: $color-white;
+    }
+  }
+</style>

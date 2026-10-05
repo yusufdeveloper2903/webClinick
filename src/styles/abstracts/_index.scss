@@ -1,0 +1,4 @@
+// Точка входа абстракций: подключается автоматически в каждый SCSS-блок
+// (см. vite.css.preprocessorOptions в astro.config.mjs). Не генерирует CSS.
+@forward 'tokens';
+@forward 'mixins';

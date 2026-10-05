@@ -1,0 +1,35 @@
+---
+/** Оформление текста из Markdown (тело услуг и статей). */
+---
+
+<div class="prose">
+  <slot />
+</div>
+
+<style lang="scss">
+  .prose {
+    max-width: 720px;
+    color: $color-muted;
+
+    :global(p + p) {
+      margin-top: 1em;
+    }
+
+    :global(h2),
+    :global(h3) {
+      margin-block: 1.5em 0.5em;
+      font-weight: $font-weight-bold;
+      color: $color-dark;
+    }
+
+    :global(a) {
+      color: $color-link;
+      text-decoration: underline;
+    }
+
+    :global(ul) {
+      padding-left: 1.2em;
+      list-style: disc;
+    }
+  }
+</style>

@@ -1,0 +1,49 @@
+---
+/** Плитка услуги в карусели на главной. */
+import { Image } from 'astro:assets';
+import { routes } from '@/config/navigation';
+import type { Service } from '@/lib/content';
+
+interface Props {
+  service: Service;
+}
+
+const { service } = Astro.props;
+---
+
+<a class="service-tile" href={routes.service(service.id)}>
+  <Image src={service.data.icon} alt="" height={70} />
+  <span class="service-tile__title">{service.data.title}</span>
+</a>
+
+<style lang="scss">
+  .service-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    height: 180px;
+    padding: 16px;
+    text-align: center;
+    background-color: $color-surface;
+    border: 1px solid $color-bg;
+    transition: border-color $transition-base;
+
+    &:hover {
+      border-color: $color-accent;
+    }
+
+    img {
+      height: 70px;
+      width: auto;
+    }
+  }
+
+  .service-tile__title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-medium;
+    line-height: 1.2;
+    color: $color-dark;
+  }
+</style>

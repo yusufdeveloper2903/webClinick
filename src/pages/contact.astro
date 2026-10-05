@@ -1,0 +1,105 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ContactList from '@/components/layout/ContactList.astro';
+import MapEmbed from '@/components/ui/MapEmbed.astro';
+import PageHero from '@/components/ui/PageHero.astro';
+import heroDog from '@/assets/images/contact/hero-dog.png';
+import pug from '@/assets/images/contact/pug.png';
+import magnifier from '@/assets/images/contact/magnifier.png';
+import clinic from '@/assets/images/contact/clinic.png';
+import locationIcon from '@/assets/images/contact/location.png';
+import calendarIcon from '@/assets/images/contact/calendar.png';
+import phoneIcon from '@/assets/images/contact/phone.png';
+
+const lead =
+  'Узнать информацию о наших услугах, записаться на приём к врачу или проконсультироваться вы можете по телефону, в любое удобное для вас время.';
+---
+
+<BaseLayout title="Контакты" description={lead}>
+  <PageHero title="Контакты" lead={lead} image={heroDog}>
+    <ContactList
+      size="lg"
+      class="contact-list"
+      icons={{ address: locationIcon, schedule: calendarIcon, phone: phoneIcon }}
+    />
+  </PageHero>
+
+  <section class="location">
+    <div class="container container--wide">
+      <div class="location__heading">
+        <Image class="location__pug" src={pug} alt="" />
+        <Image class="location__magnifier" src={magnifier} alt="" width={112} />
+        <h2 class="location__title">Как нас найти?</h2>
+      </div>
+      <div class="location__body">
+        <MapEmbed height={400} class="location__map" />
+        <Image
+          class="location__clinic"
+          src={clinic}
+          alt="Здание ветеринарной клиники"
+          width={500}
+        />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style lang="scss">
+  :global(.contact-list) {
+    margin-top: 80px;
+  }
+
+  .location {
+    padding-bottom: 20px;
+    background: url('@/assets/images/backgrounds/contact-location.png') right top no-repeat;
+  }
+
+  .location__heading {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+
+    @include down(md) {
+      flex-direction: column;
+    }
+  }
+
+  .location__magnifier {
+    position: absolute;
+    top: 11%;
+    left: 49%;
+
+    @include down(md) {
+      display: none;
+    }
+  }
+
+  .location__title {
+    @include section-title;
+
+    margin-top: 80px;
+  }
+
+  .location__body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -50px;
+
+    @include down(lg) {
+      flex-direction: column;
+      margin-top: 30px;
+    }
+  }
+
+  .location__body :global(.location__map) {
+    flex: 0 1 850px;
+  }
+
+  .location__clinic {
+    flex-shrink: 1;
+    min-width: 0;
+  }
+</style>

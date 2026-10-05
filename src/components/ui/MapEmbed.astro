@@ -1,0 +1,27 @@
+---
+import { site } from '@/config/site';
+
+interface Props {
+  height?: number;
+  class?: string;
+}
+
+const { height = 450, class: className } = Astro.props;
+---
+
+<iframe
+  class:list={['map', className]}
+  src={site.map.embedUrl}
+  title={site.map.title}
+  height={height}
+  loading="lazy"
+  referrerpolicy="no-referrer-when-downgrade"
+  allowfullscreen
+></iframe>
+
+<style lang="scss">
+  .map {
+    width: 100%;
+    border: 0;
+  }
+</style>

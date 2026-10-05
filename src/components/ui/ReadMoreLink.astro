@@ -1,0 +1,32 @@
+---
+import { Image } from 'astro:assets';
+import pawIcon from '@/assets/images/icons/paw.png';
+
+interface Props {
+  href: string;
+  /** Для скринридеров: о чём именно «Читать больше». */
+  label: string;
+}
+
+const { href, label } = Astro.props;
+---
+
+<a class="read-more" href={href}>
+  <Image src={pawIcon} alt="" width={23} />
+  Читать больше<span class="visually-hidden">: {label}</span>
+</a>
+
+<style lang="scss">
+  .read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: $font-weight-semibold;
+    color: $color-dark;
+    transition: color $transition-slow;
+
+    &:hover {
+      color: $color-accent;
+    }
+  }
+</style>

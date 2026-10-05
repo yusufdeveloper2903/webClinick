@@ -1,0 +1,14 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/ui/Button.astro';
+import PageHero from '@/components/ui/PageHero.astro';
+import { routes } from '@/config/navigation';
+---
+
+<BaseLayout title="Страница не найдена">
+  <PageHero title="404" lead="Такой страницы нет. Возможно, она переехала или ещё не создана.">
+    <Button href={routes.home} variant="dark">
+      На главную
+    </Button>
+  </PageHero>
+</BaseLayout>

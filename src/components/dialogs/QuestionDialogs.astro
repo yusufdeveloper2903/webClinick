@@ -1,0 +1,54 @@
+---
+/**
+ * Модальные окна, доступные на всех страницах:
+ * «Задать вопрос» → после отправки → «Остались вопросы?».
+ */
+import { Image } from 'astro:assets';
+import Dialog from './Dialog.astro';
+import QuestionForm from '@/components/forms/QuestionForm.astro';
+import facebookLogin from '@/assets/images/social/facebook.png';
+import googleLogin from '@/assets/images/social/google.png';
+import modalPets from '@/assets/images/decor/modal-pets.png';
+import modalTerrier from '@/assets/images/decor/modal-terrier.png';
+import { DIALOG } from '@/config/dialogs';
+---
+
+<Dialog id={DIALOG.askQuestion} title="Задать вопрос" decoration={modalPets}>
+  <div slot="aside" class="auth">
+    <h3 class="auth__title">Авторизация:</h3>
+    <!-- Вход через соцсети появится вместе с бэкендом авторизации. -->
+    <button class="auth__provider" type="button" disabled title="Скоро">
+      <Image src={facebookLogin} alt="Войти через Facebook" />
+    </button>
+    <button class="auth__provider" type="button" disabled title="Скоро">
+      <Image src={googleLogin} alt="Войти через Google" />
+    </button>
+  </div>
+  <QuestionForm
+    name="ask-question"
+    fields={['name', 'message']}
+    submitLabel="Отправить"
+    successDialog={DIALOG.followUp}
+  />
+</Dialog>
+
+<Dialog id={DIALOG.followUp} title="Остались вопросы?" decoration={modalTerrier}>
+  <QuestionForm name="follow-up-question" />
+</Dialog>
+
+<style lang="scss">
+  .auth {
+    display: grid;
+    justify-items: start;
+    gap: 21px;
+  }
+
+  .auth__title {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+  }
+
+  .auth__provider:disabled {
+    cursor: not-allowed;
+  }
+</style>

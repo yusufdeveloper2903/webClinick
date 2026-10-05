@@ -1,0 +1,146 @@
+---
+import { Image } from 'astro:assets';
+import catDoctor from '@/assets/images/services/cat-doctor.png';
+import coinsIcon from '@/assets/images/icons/coins.png';
+import documentIcon from '@/assets/images/icons/document.png';
+import ServiceTile from '@/components/cards/ServiceTile.astro';
+import Button from '@/components/ui/Button.astro';
+import CarouselButton from '@/components/ui/CarouselButton.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+import { DIALOG } from '@/config/dialogs';
+import { routes } from '@/config/navigation';
+import type { Service } from '@/lib/content';
+
+interface Props {
+  services: Service[];
+}
+
+const { services } = Astro.props;
+const featured = services.find((service) => service.data.featured) ?? services[0];
+---
+
+<section class="services-showcase" id="services">
+  <div class="container">
+    <SectionTitle align="center">Наши услуги</SectionTitle>
+
+    <div class="services-showcase__carousel" data-carousel="services">
+      <CarouselButton
+        direction="prev"
+        class="services-showcase__nav services-showcase__nav--prev"
+      />
+      <div class="swiper">
+        <ul class="swiper-wrapper">
+          {services.map((service) => (
+            <li class="swiper-slide">
+              <ServiceTile service={service} />
+            </li>
+          ))}
+        </ul>
+      </div>
+      <CarouselButton
+        direction="next"
+        class="services-showcase__nav services-showcase__nav--next"
+      />
+    </div>
+
+    {featured && (
+      <article class="spotlight">
+        <Image class="spotlight__image" src={catDoctor} alt="" width={524} />
+        <div class="spotlight__body">
+          <h3 class="spotlight__title">{featured.data.title}</h3>
+          <p>{featured.data.excerpt}</p>
+          <div class="spotlight__actions">
+            <Button href={routes.service(featured.id)} icon={coinsIcon}>
+              Узнать цену
+            </Button>
+            <Button variant="dark" icon={documentIcon} data-dialog-open={DIALOG.askQuestion}>
+              Записаться на приём
+            </Button>
+          </div>
+        </div>
+      </article>
+    )}
+  </div>
+</section>
+
+<script>
+  import { initCarousels } from '@/scripts/carousel';
+
+  initCarousels();
+</script>
+
+<style lang="scss">
+  .services-showcase {
+    margin-top: 250px;
+
+    @include down(lg) {
+      margin-top: 120px;
+    }
+  }
+
+  .services-showcase__carousel {
+    position: relative;
+    margin-top: 50px;
+  }
+
+  // CarouselButton — дочерний компонент, поэтому классы-модификаторы задаются через :global().
+  .services-showcase__carousel :global(.services-showcase__nav) {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    translate: 0 -50%;
+  }
+
+  .services-showcase__carousel :global(.services-showcase__nav--prev) {
+    left: -50px;
+
+    @include down(xl) {
+      left: 4px;
+    }
+  }
+
+  .services-showcase__carousel :global(.services-showcase__nav--next) {
+    right: -50px;
+
+    @include down(xl) {
+      right: 4px;
+    }
+  }
+
+  .spotlight {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-top: 10px;
+    padding: 20px;
+    background-color: $color-surface;
+
+    @include down(md) {
+      flex-direction: column;
+    }
+  }
+
+  .spotlight__image {
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  .spotlight__body {
+    display: grid;
+    gap: 16px;
+    color: $color-muted;
+  }
+
+  .spotlight__title {
+    font-size: $font-size-h3;
+    font-weight: $font-weight-medium;
+    color: $color-dark;
+  }
+
+  .spotlight__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+  }
+</style>

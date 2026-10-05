@@ -1,0 +1,82 @@
+---
+import '@/styles/global.scss';
+import Seo from '@/components/layout/Seo.astro';
+import SiteHeader from '@/components/layout/SiteHeader.astro';
+import SiteFooter from '@/components/layout/SiteFooter.astro';
+import QuestionDialogs from '@/components/dialogs/QuestionDialogs.astro';
+import { site } from '@/config/site';
+
+type Background = 'none' | 'paws' | 'about' | 'blog';
+
+interface Props {
+  title?: string | undefined;
+  description?: string | undefined;
+  /** Декоративный фон основной области страницы. */
+  background?: Background;
+}
+
+const { title, description, background = 'none' } = Astro.props;
+---
+
+<!doctype html>
+<html lang={site.lang}>
+  <head>
+    <Seo title={title} description={description} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      Перейти к содержимому
+    </a>
+    <SiteHeader />
+    <main id="main" class:list={['page', `page--bg-${background}`]}>
+      <slot />
+    </main>
+    <SiteFooter />
+    <QuestionDialogs />
+
+    <script>
+      import { initDialogs } from '@/scripts/dialogs';
+      import { initForms } from '@/scripts/forms';
+
+      initDialogs();
+      initForms();
+    </script>
+  </body>
+</html>
+
+<style lang="scss">
+  .skip-link {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: $z-dialog;
+    padding: 8px 16px;
+    color: $color-white;
+    background-color: $color-dark;
+    transform: translateY(-200%);
+
+    &:focus-visible {
+      transform: none;
+    }
+  }
+
+  .page {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+
+  .page--bg-paws {
+    background-image: url('@/assets/images/backgrounds/paws-pattern.png');
+    background-repeat: repeat-y;
+    background-size: 100% auto;
+  }
+
+  .page--bg-about {
+    background-image: url('@/assets/images/backgrounds/about.png');
+  }
+
+  .page--bg-blog {
+    background-image: url('@/assets/images/backgrounds/blog.png');
+  }
+</style>

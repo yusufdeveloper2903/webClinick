@@ -1,0 +1,17 @@
+// Используются только начертания семейства «Futura PT», которые реально задействованы в макете.
+$_faces: (
+  'Light': 300,
+  'Medium': 500,
+  'Bold': 700,
+  'Heavy': 900,
+);
+
+@each $name, $weight in $_faces {
+  @font-face {
+    font-family: 'Futura PT';
+    font-style: normal;
+    font-weight: $weight;
+    font-display: swap;
+    src: url('@/assets/fonts/FuturaPT-#{$name}.woff2') format('woff2');
+  }
+}

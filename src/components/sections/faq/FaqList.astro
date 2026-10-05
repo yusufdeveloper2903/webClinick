@@ -1,0 +1,128 @@
+---
+/**
+ * Аккордеон FAQ на нативных <details name="…">: в группе одновременно открыт один вопрос,
+ * JavaScript не нужен. Вопросы без ответа выводятся неактивными.
+ */
+import { Image } from 'astro:assets';
+import pawOrange from '@/assets/images/icons/paw-orange.png';
+import pawBlue from '@/assets/images/icons/paw-blue.png';
+import type { FaqItem } from '@/lib/content';
+import { formatDate, toISODate } from '@/lib/format';
+
+interface Props {
+  items: FaqItem[];
+}
+
+const { items } = Astro.props;
+const accentIcon = { orange: pawOrange, blue: pawBlue } as const;
+const firstAnsweredId = items.find((item) => item.data.answer)?.id;
+---
+
+<ul class="faq">
+  {items.map(({ id, data }) => {
+    const meta = (
+      <span class="faq__meta">
+        <Image src={accentIcon[data.accent]} alt="" width={28} />
+        <time datetime={toISODate(data.date)}>{formatDate(data.date)}</time>
+        <span class="faq__author">{data.author}</span>
+      </span>
+    );
+
+    return (
+      <li class="faq__item">
+        {data.answer ? (
+          <details class="faq__details" name="faq" open={id === firstAnsweredId}>
+            <summary class="faq__summary">
+              {meta}
+              <span class="faq__question">{data.question}</span>
+            </summary>
+            <p class="faq__answer">{data.answer}</p>
+          </details>
+        ) : (
+          <div class="faq__details faq__details--pending" aria-disabled="true">
+            <div class="faq__summary">
+              {meta}
+              <span class="faq__question">{data.question}</span>
+              <span class="visually-hidden">(ответ готовится)</span>
+            </div>
+          </div>
+        )}
+      </li>
+    );
+  })}
+</ul>
+
+<style lang="scss">
+  .faq {
+    display: grid;
+    gap: 18px;
+  }
+
+  .faq__details {
+    padding: 45px;
+    background-color: $color-surface;
+
+    @include down(md) {
+      padding: 24px;
+    }
+
+    &--pending {
+      opacity: 0.5;
+    }
+  }
+
+  .faq__summary {
+    display: grid;
+    gap: 12px;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+
+  details > .faq__summary {
+    position: relative;
+    padding-right: 40px;
+    cursor: pointer;
+
+    &::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: 6px;
+      width: 12px;
+      height: 12px;
+      border-right: 2px solid $color-dark;
+      border-bottom: 2px solid $color-dark;
+      transform: rotate(45deg);
+      transition: transform $transition-base;
+    }
+  }
+
+  details[open] > .faq__summary::after {
+    transform: rotate(-135deg);
+  }
+
+  .faq__meta {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-weight: $font-weight-medium;
+  }
+
+  .faq__author {
+    margin-left: 8px;
+    color: $color-secondary;
+  }
+
+  .faq__question {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+  }
+
+  .faq__answer {
+    margin-top: 16px;
+    line-height: 1.5;
+  }
+</style>

@@ -1,0 +1,113 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ArticleCard from '@/components/cards/ArticleCard.astro';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import Prose from '@/components/ui/Prose.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+import TagList from '@/components/ui/TagList.astro';
+import { routes } from '@/config/navigation';
+import { getArticles, type Article } from '@/lib/content';
+import { formatDate, toISODate } from '@/lib/format';
+
+export const getStaticPaths = (async () => {
+  const articles = await getArticles();
+  return articles.map((article) => ({ params: { slug: article.id }, props: { article } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  article: Article;
+}
+
+const { article } = Astro.props;
+const { title, excerpt, date, cover, tags } = article.data;
+const { Content } = await render(article);
+const moreArticles = (await getArticles()).filter((item) => item.id !== article.id).slice(0, 4);
+---
+
+<BaseLayout title={title} description={excerpt} background="blog">
+  <article class="container article">
+    <Breadcrumbs
+      items={[
+        { label: 'Главная', href: routes.home },
+        { label: 'Полезные статьи', href: routes.blog },
+        { label: title },
+      ]}
+    />
+    <header class="article__header">
+      <div class="article__meta">
+        <TagList tags={tags} />
+        <time datetime={toISODate(date)}>{formatDate(date)}</time>
+      </div>
+      <h1 class="article__title">{title}</h1>
+    </header>
+    <Image
+      class="article__cover"
+      src={cover}
+      alt=""
+      widths={[400, 800]}
+      sizes="(max-width: 800px) 100vw, 800px"
+      loading="eager"
+    />
+    <Prose>
+      <Content />
+    </Prose>
+  </article>
+
+  {moreArticles.length > 0 && (
+    <section class="container more">
+      <SectionTitle>Другие статьи</SectionTitle>
+      <ul class="more__grid">
+        {moreArticles.map((item) => (
+          <li>
+            <ArticleCard article={item} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+</BaseLayout>
+
+<style lang="scss">
+  .article {
+    display: grid;
+    gap: 30px;
+    max-width: 832px;
+    padding-top: 30px;
+  }
+
+  .article__meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+    color: $color-muted;
+  }
+
+  .article__title {
+    @include page-title;
+
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1;
+  }
+
+  .article__cover {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    border-radius: $radius-lg;
+  }
+
+  .more {
+    margin-top: 100px;
+  }
+
+  .more__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 40px;
+  }
+</style>

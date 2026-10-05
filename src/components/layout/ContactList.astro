@@ -1,0 +1,101 @@
+---
+/**
+ * Адрес, режим работы и телефоны клиники.
+ * Используется в подвале и на странице контактов — данные берутся из config/site.
+ */
+import { Image } from 'astro:assets';
+import houseIcon from '@/assets/images/icons/house.svg';
+import phoneIcon from '@/assets/images/icons/phone.svg';
+import calendarIcon from '@/assets/images/icons/calendar.svg';
+import { site } from '@/config/site';
+
+interface Props {
+  /** Свои иконки для крупного варианта на странице контактов. */
+  icons?: { address: ImageMetadata; schedule: ImageMetadata; phone: ImageMetadata } | undefined;
+  size?: 'sm' | 'lg';
+  class?: string | undefined;
+}
+
+const {
+  icons = { address: houseIcon, schedule: calendarIcon, phone: phoneIcon },
+  size = 'sm',
+  class: className,
+} = Astro.props;
+const iconSize = size === 'lg' ? 56 : 16;
+---
+
+<ul class:list={['contacts', `contacts--${size}`, className]}>
+  <li class="contacts__item">
+    <Image class="contacts__icon" src={icons.schedule} alt="" height={iconSize} />
+    <p>
+      {site.schedule.map((entry) => (
+        <span class="contacts__line">
+          <b>{entry.days}</b> {entry.hours}
+        </span>
+      ))}
+    </p>
+  </li>
+  <li class="contacts__item">
+    <Image class="contacts__icon" src={icons.address} alt="" height={iconSize} />
+    <address>
+      <span class="contacts__line">{site.address.city},</span>
+      <span class="contacts__line">{site.address.street}</span>
+    </address>
+  </li>
+  <li class="contacts__item">
+    <Image class="contacts__icon" src={icons.phone} alt="" height={iconSize} />
+    <p>
+      {site.phones.map((phone) => (
+        <a class="contacts__line contacts__phone" href={`tel:${phone.value}`}>
+          {phone.label}
+        </a>
+      ))}
+    </p>
+  </li>
+</ul>
+
+<style lang="scss">
+  .contacts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px 40px;
+    font-weight: $font-weight-medium;
+    color: $color-dark;
+  }
+
+  .contacts__item {
+    display: flex;
+    gap: 10px;
+  }
+
+  .contacts__line {
+    display: block;
+  }
+
+  address {
+    font-style: normal;
+  }
+
+  .contacts__phone {
+    transition: color $transition-base;
+
+    &:hover {
+      color: $color-accent;
+    }
+  }
+
+  .contacts--sm {
+    font-size: $font-size-sm;
+    line-height: 1.3;
+  }
+
+  .contacts--lg {
+    font-size: $font-size-base;
+    line-height: 1.3;
+
+    .contacts__item {
+      flex-direction: column;
+      width: 160px;
+    }
+  }
+</style>

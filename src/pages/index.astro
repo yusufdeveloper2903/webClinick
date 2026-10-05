@@ -1,0 +1,19 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import HomeHero from '@/components/sections/home/HomeHero.astro';
+import ServicesShowcase from '@/components/sections/home/ServicesShowcase.astro';
+import SubscribeCta from '@/components/sections/home/SubscribeCta.astro';
+import ArticlesPreview from '@/components/sections/home/ArticlesPreview.astro';
+import FeedbackSection from '@/components/sections/home/FeedbackSection.astro';
+import { getArticles, getServices } from '@/lib/content';
+
+const [services, articles] = await Promise.all([getServices(), getArticles()]);
+---
+
+<BaseLayout>
+  <HomeHero />
+  <ServicesShowcase services={services} />
+  <SubscribeCta />
+  <ArticlesPreview articles={articles} />
+  <FeedbackSection />
+</BaseLayout>

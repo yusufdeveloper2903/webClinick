@@ -1,0 +1,138 @@
+---
+import Button from '@/components/ui/Button.astro';
+import { routes } from '@/config/navigation';
+import { site } from '@/config/site';
+---
+
+<section class="home-hero">
+  <div class="container">
+    <div class="home-hero__content">
+      <h1 class="home-hero__title">
+        Мы заботимся о <span class="home-hero__highlight">ваших питомцах!</span>
+      </h1>
+      <p class="home-hero__lead">
+        Вам и Вашему любимцу — множество услуг по диагностике, профилактике заболеваний, лечению и
+        уходу за Вашими животными. Профессионалы, работающие в нашей клинике, сделают всё для того,
+        чтобы быстро, эффективно и максимально безболезненно выполнить любые процедуры, которые
+        необходимы Вашему домашнему любимцу.
+      </p>
+      <Button href={routes.services} variant="dark">
+        Наши услуги
+      </Button>
+    </div>
+
+    <figure class="home-hero__quote">
+      <blockquote>
+        <p>
+          Наша ветеринарная клиника готова уделить максимум внимания Вам и Вашему питомцу. Здоровье
+          и благополучие Ваших животных очень важно для нас, и мы стремимся оказать наилучшую
+          возможную ветеринарную помощь.
+        </p>
+      </blockquote>
+      <figcaption>{site.name}</figcaption>
+    </figure>
+  </div>
+</section>
+
+<style lang="scss">
+  .home-hero {
+    padding-top: 240px;
+    background: url('@/assets/images/backgrounds/home-intro.png') top center / 1350px auto no-repeat;
+
+    @include down(lg) {
+      padding-top: 80px;
+      background-size: cover;
+    }
+  }
+
+  .home-hero__content {
+    display: grid;
+    justify-items: start;
+    gap: 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: 0;
+
+    @include down(lg) {
+      margin-inline: auto;
+      padding: 24px;
+      background-color: rgb(255 255 255 / 85%);
+    }
+  }
+
+  .home-hero__title {
+    font-size: clamp(40px, 6vw, 65px);
+    font-weight: $font-weight-bold;
+    line-height: 0.85;
+  }
+
+  .home-hero__highlight {
+    color: $color-violet;
+  }
+
+  .home-hero__lead {
+    max-width: 500px;
+    color: $color-muted;
+  }
+
+  .home-hero__quote {
+    max-width: 700px;
+    margin: 450px auto 0;
+    text-align: center;
+
+    @include down(lg) {
+      margin-top: 120px;
+    }
+
+    blockquote {
+      position: relative;
+      padding: 40px 0;
+      font-size: $font-size-xl;
+      line-height: 1.3;
+      color: $color-muted;
+      border-block: 1px solid transparent;
+      border-image: linear-gradient(
+          90deg,
+          transparent calc(50% - 100px),
+          $color-muted calc(50% - 100px),
+          $color-muted calc(50% + 100px),
+          transparent calc(50% + 100px)
+        )
+        1;
+
+      &::before,
+      &::after {
+        position: absolute;
+        font-size: 100px;
+        line-height: 1;
+        color: $color-dark;
+      }
+
+      &::before {
+        content: '“';
+        top: 30px;
+        left: -60px;
+      }
+
+      &::after {
+        content: '”';
+        bottom: -40px;
+        right: -40px;
+      }
+
+      @include down(md) {
+        &::before,
+        &::after {
+          display: none;
+        }
+      }
+    }
+
+    figcaption {
+      margin-top: 20px;
+      font-size: $font-size-xl;
+      font-weight: $font-weight-medium;
+      color: $color-dark;
+    }
+  }
+</style>

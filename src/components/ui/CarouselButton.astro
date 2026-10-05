@@ -1,0 +1,50 @@
+---
+interface Props {
+  direction: 'prev' | 'next';
+  class?: string | undefined;
+}
+
+const { direction, class: className } = Astro.props;
+const label = direction === 'prev' ? 'Предыдущий слайд' : 'Следующий слайд';
+const attrs = direction === 'prev' ? { 'data-carousel-prev': '' } : { 'data-carousel-next': '' };
+---
+
+<button
+  class:list={['carousel-btn', `carousel-btn--${direction}`, className]}
+  type="button"
+  aria-label={label}
+  {...attrs}
+>
+  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+    <path
+      d={direction === 'prev' ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7'}
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    ></path>
+  </svg>
+</button>
+
+<style lang="scss">
+  .carousel-btn {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 54px;
+    color: $color-white;
+    background-color: rgb(134 134 134 / 50%);
+    border-radius: $radius-md;
+    transition: background-color $transition-base;
+
+    &:hover {
+      background-color: $color-accent;
+    }
+
+    &:global(.swiper-button-disabled) {
+      opacity: 0.4;
+      cursor: default;
+    }
+  }
+</style>

@@ -1,0 +1,70 @@
+---
+import QuestionForm from '@/components/forms/QuestionForm.astro';
+import MapEmbed from '@/components/ui/MapEmbed.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+---
+
+<section class="feedback" id="feedback">
+  <div class="container feedback__inner">
+    <MapEmbed class="feedback__map" />
+    <div class="feedback__content">
+      <SectionTitle tone="light">Обратная связь</SectionTitle>
+      <p class="feedback__lead">
+        При возникновении вопросов по поводу работы клиники или консультаций заполните форму ниже:
+      </p>
+      <QuestionForm name="feedback" submitVariant="accent" />
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  .feedback {
+    margin-top: 250px;
+    background-color: $color-feedback-bg;
+    background-image:
+      url('@/assets/images/backgrounds/feedback-fish.png'),
+      url('@/assets/images/backgrounds/feedback-label.png'),
+      url('@/assets/images/backgrounds/feedback-question.png');
+    background-size:
+      contain,
+      200px auto,
+      200px auto;
+    background-repeat: no-repeat;
+    background-position:
+      right,
+      left 900px top 0,
+      top right;
+
+    @include down(lg) {
+      margin-top: 120px;
+      background-image: none;
+    }
+  }
+
+  .feedback__inner {
+    display: flex;
+    gap: 5%;
+
+    @include down(md) {
+      flex-direction: column;
+    }
+  }
+
+  .feedback__inner :global(.feedback__map) {
+    flex: 0 0 500px;
+    max-width: 100%;
+    min-height: 450px;
+  }
+
+  .feedback__content {
+    display: grid;
+    align-content: start;
+    gap: 16px;
+    padding-block: 50px 30px;
+  }
+
+  .feedback__lead {
+    max-width: 400px;
+    color: $color-muted;
+  }
+</style>

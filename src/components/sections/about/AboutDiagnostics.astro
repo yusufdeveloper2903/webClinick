@@ -1,0 +1,65 @@
+---
+import { Image } from 'astro:assets';
+import dog from '@/assets/images/about/dog.png';
+import { routes } from '@/config/navigation';
+---
+
+<section class="about-diagnostics">
+  <div class="container container--wide about-diagnostics__inner">
+    <div class="about-diagnostics__content">
+      <p>
+        Ветеринарная клиника предоставляет широкий спектр услуг, начиная от простых профилактических
+        мероприятий до сложных хирургических вмешательств. Мы проводим рентгенографические и
+        ультразвуковые исследования. Проводится анализ крови — как общеклинический, так и
+        биохимический, — а также общий анализ мочи с микроскопией осадка.
+      </p>
+      <p>
+        Только у нас Вы можете провести <span class="text-secondary">анализ крови кошек</span> на
+        такие заболевания, как панлейкопения, калицивироз, герпесвирусная инфекция, коронавироз,
+        токсоплазмоз и хламидиоз, а также{' '}
+        <span class="text-secondary">собак — на такие заболевания</span>, как инфекционный гепатит,
+        парвовирусный энтерит, чума плотоядных. С полным спектром услуг можно ознакомиться{' '}
+        <a class="about-diagnostics__link" href={routes.services}>
+          здесь
+        </a>
+        .
+      </p>
+    </div>
+    <Image class="about-diagnostics__image" src={dog} alt="Довольная собака" width={620} />
+  </div>
+</section>
+
+<style lang="scss">
+  .about-diagnostics {
+    overflow: hidden;
+  }
+
+  .about-diagnostics__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 40px;
+
+    @include down(lg) {
+      flex-direction: column;
+    }
+  }
+
+  .about-diagnostics__content {
+    display: grid;
+    flex: 0 1 45%;
+    gap: 25px;
+    font-size: $font-size-lg;
+    color: $color-muted;
+  }
+
+  .about-diagnostics__link {
+    color: $color-link;
+    text-decoration: underline;
+  }
+
+  .about-diagnostics__image {
+    flex: 0 1 45%;
+    min-width: 0;
+  }
+</style>

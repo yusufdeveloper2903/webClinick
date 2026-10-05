@@ -1,0 +1,18 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import AboutHero from '@/components/sections/about/AboutHero.astro';
+import AboutCare from '@/components/sections/about/AboutCare.astro';
+import AboutDiagnostics from '@/components/sections/about/AboutDiagnostics.astro';
+import GroomingGallery from '@/components/sections/about/GroomingGallery.astro';
+---
+
+<BaseLayout
+  title="О клинике"
+  description="Наша ветеринарная клиника: диагностика, анализы, хирургия и кабинет грумера."
+  background="about"
+>
+  <AboutHero />
+  <AboutCare />
+  <AboutDiagnostics />
+  <GroomingGallery />
+</BaseLayout>

@@ -1,0 +1,78 @@
+@use 'tokens' as *;
+
+// Mobile-first медиазапрос: стили применяются от брейкпоинта и шире.
+@mixin up($name) {
+  @media (min-width: breakpoint($name)) {
+    @content;
+  }
+}
+
+// Desktop-first медиазапрос: стили применяются ниже брейкпоинта.
+@mixin down($name) {
+  @media (max-width: calc(#{breakpoint($name)} - 0.02px)) {
+    @content;
+  }
+}
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@mixin focus-ring {
+  outline: 2px solid $color-secondary;
+  outline-offset: 2px;
+}
+
+@mixin hover-lift {
+  transition: box-shadow $transition-slow;
+
+  &:hover {
+    box-shadow: $shadow-hover;
+  }
+}
+
+// Заголовок страницы (h1 в hero-блоках внутренних страниц).
+@mixin page-title {
+  font-size: clamp(40px, 7vw, $font-size-h1);
+  font-weight: $font-weight-bold;
+  line-height: 0.92;
+  color: $color-dark;
+}
+
+@mixin section-title {
+  font-size: clamp(32px, 5vw, $font-size-h2);
+  font-weight: $font-weight-bold;
+  line-height: 1.15;
+  color: $color-dark;
+}
+
+// Стандартное поле ввода форм сайта.
+@mixin form-control {
+  width: 100%;
+  padding: 12px 16px;
+  font: inherit;
+  color: $color-dark;
+  background: $color-white;
+  border: 1px solid transparent;
+  border-radius: $radius-sm;
+
+  &::placeholder {
+    color: $color-muted;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:user-invalid {
+    border-color: #e5484d;
+  }
+}
