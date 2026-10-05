@@ -1,0 +1,42 @@
+---
+import Button from '@/components/ui/Button.astro';
+---
+
+<form class="subscribe" data-form="subscribe">
+  <label class="visually-hidden" for="subscribe-email">
+    Email
+  </label>
+  <input
+    class="subscribe__input"
+    id="subscribe-email"
+    name="email"
+    type="email"
+    autocomplete="email"
+    placeholder="Укажите Ваш email адрес"
+    required
+  />
+  <Button type="submit" variant="dark">
+    Подписаться
+  </Button>
+  <p class="subscribe__status" data-form-status role="status" aria-live="polite"></p>
+</form>
+
+<style lang="scss">
+  .subscribe {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .subscribe__input {
+    @include form-control;
+
+    max-width: 300px;
+    border-radius: $radius-md;
+  }
+
+  .subscribe__status {
+    flex-basis: 100%;
+    color: $color-white;
+  }
+</style>

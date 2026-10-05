@@ -1,0 +1,44 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ArticleCard from '@/components/cards/ArticleCard.astro';
+import ArticleFeatureCard from '@/components/cards/ArticleFeatureCard.astro';
+import PageHero from '@/components/ui/PageHero.astro';
+import heroCat from '@/assets/images/articles/blog-hero-cat.png';
+import { getArticles } from '@/lib/content';
+
+const articles = await getArticles();
+const featured = articles.find((article) => article.data.featured);
+const rest = articles.filter((article) => article !== featured);
+const lead =
+  'Советы ветеринаров о здоровье, питании и уходе за домашними животными. Записаться на приём или проконсультироваться вы можете по телефону, в любое удобное для вас время.';
+---
+
+<BaseLayout title="Полезные статьи" description={lead} background="blog">
+  <PageHero title="Полезные статьи" lead={lead} image={heroCat} />
+
+  <div class="container blog">
+    {featured && <ArticleFeatureCard article={featured} />}
+
+    <ul class="blog__grid">
+      {rest.map((article) => (
+        <li>
+          <ArticleCard article={article} />
+        </li>
+      ))}
+    </ul>
+  </div>
+</BaseLayout>
+
+<style lang="scss">
+  .blog {
+    display: grid;
+    gap: 90px;
+    padding-top: 30px;
+  }
+
+  .blog__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 40px 20px;
+  }
+</style>

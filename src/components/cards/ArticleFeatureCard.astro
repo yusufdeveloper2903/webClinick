@@ -1,0 +1,103 @@
+---
+/** Горизонтальная карточка статьи: картинка слева, теги и текст справа. */
+import { Image } from 'astro:assets';
+import ReadMoreLink from '@/components/ui/ReadMoreLink.astro';
+import TagList from '@/components/ui/TagList.astro';
+import { routes } from '@/config/navigation';
+import type { Article } from '@/lib/content';
+import { formatDate, toISODate } from '@/lib/format';
+
+interface Props {
+  article: Article;
+  /** compact — для превью на главной (вертикальный баннер), large — для страницы блога. */
+  size?: 'compact' | 'large';
+}
+
+const { article, size = 'large' } = Astro.props;
+const { title, excerpt, date, cover, banner, tags } = article.data;
+const image = size === 'compact' ? (banner ?? cover) : cover;
+---
+
+<article class:list={['feature-card', `feature-card--${size}`]}>
+  <Image class="feature-card__image" src={image} alt="" widths={[350, 500]} sizes="500px" />
+  <div class="feature-card__body">
+    <div class="feature-card__meta">
+      <TagList tags={tags} />
+      <time class="feature-card__date" datetime={toISODate(date)}>
+        {formatDate(date)}
+      </time>
+    </div>
+    <h3 class="feature-card__title">{title}</h3>
+    <p class="feature-card__excerpt">{excerpt}</p>
+    <ReadMoreLink href={routes.article(article.id)} label={title} />
+  </div>
+</article>
+
+<style lang="scss">
+  .feature-card {
+    display: flex;
+    height: 100%;
+    background-color: $color-surface;
+    border-radius: $radius-lg;
+    overflow: hidden;
+
+    @include hover-lift;
+
+    @include down(md) {
+      flex-direction: column;
+    }
+  }
+
+  .feature-card__image {
+    flex-shrink: 0;
+    object-fit: cover;
+
+    @include down(md) {
+      width: 100%;
+      max-height: 320px;
+    }
+  }
+
+  .feature-card--large .feature-card__image {
+    width: 500px;
+  }
+
+  .feature-card--compact .feature-card__image {
+    width: 300px;
+  }
+
+  .feature-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 30px;
+  }
+
+  .feature-card__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .feature-card__date {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-muted;
+  }
+
+  .feature-card__title {
+    font-size: 30px;
+    font-weight: $font-weight-bold;
+    line-height: 1.25;
+  }
+
+  .feature-card--compact .feature-card__title {
+    font-size: 22px;
+  }
+
+  .feature-card__excerpt {
+    flex: 1;
+    color: $color-muted;
+  }
+</style>

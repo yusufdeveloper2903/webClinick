@@ -1,0 +1,125 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ArticleCard from '@/components/cards/ArticleCard.astro';
+import AskCta from '@/components/sections/services/AskCta.astro';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import Button from '@/components/ui/Button.astro';
+import Prose from '@/components/ui/Prose.astro';
+import coinsIcon from '@/assets/images/icons/coins.png';
+import documentIcon from '@/assets/images/icons/document.png';
+import { DIALOG } from '@/config/dialogs';
+import { routes } from '@/config/navigation';
+import { primaryPhone } from '@/config/site';
+import { getArticles, getServices, type Service } from '@/lib/content';
+
+export const getStaticPaths = (async () => {
+  const services = await getServices();
+  return services.map((service) => ({ params: { slug: service.id }, props: { service } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  service: Service;
+}
+
+const { service } = Astro.props;
+const { Content } = await render(service);
+const relatedArticles = (await getArticles()).slice(0, 2);
+
+// «Первичный осмотр» → «Первичный» + акцентное «осмотр».
+const [firstWord, ...restWords] = service.data.title.split(' ');
+---
+
+<BaseLayout title={service.data.title} description={service.data.excerpt} background="paws">
+  <div class="service-banner" role="presentation"></div>
+
+  <div class="container service">
+    <article class="service__content">
+      <Breadcrumbs
+        items={[
+          { label: 'Главная', href: routes.home },
+          { label: 'Наши услуги', href: routes.services },
+          { label: service.data.title },
+        ]}
+      />
+      <h1 class="service__title">
+        {firstWord} {restWords.length > 0 && <span class="text-accent">{restWords.join(' ')}</span>}
+      </h1>
+      <Prose>
+        <Content />
+      </Prose>
+      <div class="service__actions">
+        <Button href={`tel:${primaryPhone.value}`} icon={coinsIcon}>
+          Узнать цену
+        </Button>
+        <Button variant="dark" icon={documentIcon} data-dialog-open={DIALOG.askQuestion}>
+          Записаться на приём
+        </Button>
+      </div>
+    </article>
+
+    <aside class="service__aside" aria-label="Полезные статьи">
+      <ul class="service__articles">
+        {relatedArticles.map((article) => (
+          <li>
+            <ArticleCard article={article} />
+          </li>
+        ))}
+      </ul>
+    </aside>
+  </div>
+
+  <AskCta />
+</BaseLayout>
+
+<style lang="scss">
+  .service-banner {
+    height: 500px;
+    background: url('@/assets/images/backgrounds/service-hero.png') center / cover no-repeat;
+
+    @include down(md) {
+      height: 240px;
+    }
+  }
+
+  .service {
+    display: flex;
+    gap: 60px;
+    padding-top: 20px;
+
+    @include down(lg) {
+      flex-direction: column;
+    }
+  }
+
+  .service__content {
+    flex: 1;
+  }
+
+  .service__title {
+    @include page-title;
+
+    margin-bottom: 30px;
+  }
+
+  .service__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 30px;
+  }
+
+  .service__aside {
+    flex: 0 0 270px;
+  }
+
+  .service__articles {
+    display: grid;
+    gap: 20px;
+
+    @include down(lg) {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+  }
+</style>

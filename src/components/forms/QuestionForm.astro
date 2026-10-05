@@ -1,0 +1,122 @@
+---
+/**
+ * Форма «Задать вопрос». Одна разметка для страницы и модальных окон;
+ * отправку обрабатывает scripts/forms.ts по атрибуту data-form.
+ */
+import Button from '@/components/ui/Button.astro';
+
+type Field = 'name' | 'email' | 'message';
+
+interface Props {
+  name: string;
+  fields?: Field[];
+  submitLabel?: string;
+  /** На тёмном фоне используйте accent. */
+  submitVariant?: 'dark' | 'accent';
+  successDialog?: string | undefined;
+  class?: string | undefined;
+}
+
+const {
+  name,
+  fields = ['name', 'email', 'message'],
+  submitLabel = 'Задать вопрос',
+  submitVariant = 'dark',
+  successDialog,
+  class: className,
+} = Astro.props;
+
+const id = (field: Field) => `${name}-${field}`;
+const messagePlaceholder =
+  'Опишите Ваш вопрос.\nНапример: в каком возрасте можно прививать от бешенства?';
+---
+
+<form
+  class:list={['question-form', className]}
+  data-form={name}
+  data-success-dialog={successDialog}
+  novalidate={false}
+>
+  {fields.includes('name') && (
+    <>
+      <label class="visually-hidden" for={id('name')}>
+        Ваше имя
+      </label>
+      <input
+        class="question-form__control"
+        id={id('name')}
+        name="name"
+        type="text"
+        autocomplete="name"
+        placeholder="Ваше имя"
+        required
+      />
+    </>
+  )}
+  {fields.includes('email') && (
+    <>
+      <label class="visually-hidden" for={id('email')}>
+        Email для обратной связи
+      </label>
+      <input
+        class="question-form__control"
+        id={id('email')}
+        name="email"
+        type="email"
+        autocomplete="email"
+        placeholder="Email для обратной связи"
+        required
+      />
+    </>
+  )}
+  {fields.includes('message') && (
+    <>
+      <label class="visually-hidden" for={id('message')}>
+        Ваш вопрос
+      </label>
+      <textarea
+        class="question-form__control"
+        id={id('message')}
+        name="message"
+        rows="6"
+        placeholder={messagePlaceholder}
+        required
+      />
+    </>
+  )}
+  <Button type="submit" variant={submitVariant} class="question-form__submit">
+    {submitLabel}
+  </Button>
+  <p class="question-form__status" data-form-status role="status" aria-live="polite"></p>
+</form>
+
+<style lang="scss">
+  .question-form {
+    display: grid;
+    gap: 16px;
+    max-width: 350px;
+  }
+
+  .question-form__control {
+    @include form-control;
+
+    resize: vertical;
+  }
+
+  .question-form :global(.question-form__submit) {
+    justify-self: start;
+  }
+
+  .question-form__status {
+    min-height: 1lh;
+    font-size: $font-size-sm;
+
+    &[data-status='success'] {
+      color: #2f9e44;
+    }
+
+    &[data-status='error'] {
+      color: #e5484d;
+    }
+  }
+</style>

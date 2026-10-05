@@ -1,0 +1,257 @@
+---
+import { Image } from 'astro:assets';
+import logo from '@/assets/images/brand/logo.png';
+import houseIcon from '@/assets/images/icons/house.svg';
+import phoneIcon from '@/assets/images/icons/phone.svg';
+import calendarIcon from '@/assets/images/icons/calendar.svg';
+import fishIcon from '@/assets/images/icons/fish.png';
+import pawIcon from '@/assets/images/icons/paw.png';
+import { DIALOG } from '@/config/dialogs';
+import { isActive, mainNav, routes } from '@/config/navigation';
+import { fullAddress, site } from '@/config/site';
+
+const { pathname } = Astro.url;
+---
+
+<header class="site-header">
+  <div class="topbar">
+    <ul class="container topbar__list">
+      <li class="topbar__item">
+        <Image src={houseIcon} alt="" />
+        <span>{fullAddress}</span>
+      </li>
+      <li class="topbar__item">
+        <Image src={phoneIcon} alt="" />
+        <span class="topbar__phones">
+          {site.phones.map((phone) => (
+            <a href={`tel:${phone.value}`}>{phone.label}</a>
+          ))}
+        </span>
+      </li>
+      <li class="topbar__item">
+        <Image src={calendarIcon} alt="" />
+        <span>{site.schedule.map((entry) => `${entry.days} ${entry.hours}`).join('  ')}</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="navbar">
+    <div class="container container--wide navbar__inner">
+      <a class="navbar__logo" href={routes.home} aria-label={`${site.name} — на главную`}>
+        <Image src={logo} alt="" height={70} loading="eager" />
+      </a>
+
+      <button
+        class="navbar__toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="main-nav"
+        data-nav-toggle
+      >
+        <span class="visually-hidden">Открыть меню</span>
+        <span class="navbar__burger" aria-hidden="true"></span>
+      </button>
+
+      <nav id="main-nav" class="navbar__nav" aria-label="Основное меню">
+        <ul class="navbar__list">
+          {mainNav.map((item) => (
+            <li>
+              <a
+                class="navbar__link"
+                href={item.href}
+                aria-current={isActive(item.href, pathname) ? 'page' : undefined}
+              >
+                {item.href === routes.home && (
+                  <Image src={fishIcon} alt="" height={20} loading="eager" />
+                )}
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <button class="navbar__ask" type="button" data-dialog-open={DIALOG.askQuestion}>
+          <Image src={pawIcon} alt="" height={20} loading="eager" />
+          Задать вопрос
+        </button>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+
+  toggle?.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!expanded));
+  });
+</script>
+
+<style lang="scss">
+  .site-header {
+    position: relative;
+    z-index: $z-header;
+  }
+
+  .topbar {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    background-color: $color-bg;
+
+    @include down(lg) {
+      display: none;
+    }
+  }
+
+  .topbar__list {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding-block: 18px;
+  }
+
+  .topbar__item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .topbar__phones {
+    display: flex;
+    gap: 10px;
+
+    a:hover {
+      color: $color-accent;
+    }
+  }
+
+  .navbar {
+    background-color: $color-white;
+  }
+
+  .navbar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    padding-block: 10px;
+  }
+
+  .navbar__logo {
+    flex-shrink: 0;
+  }
+
+  .navbar__nav {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+  }
+
+  .navbar__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 30px;
+  }
+
+  .navbar__link,
+  .navbar__ask {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-block: 8px;
+    font-size: $font-size-base;
+    font-weight: $font-weight-medium;
+    color: $color-dark;
+    border-bottom: 4px solid transparent;
+    transition:
+      color $transition-base,
+      border-color $transition-base;
+
+    &:hover {
+      color: $color-accent;
+    }
+  }
+
+  .navbar__link[aria-current='page'] {
+    border-bottom-color: $color-accent;
+  }
+
+  .navbar__toggle {
+    display: none;
+    width: 44px;
+    height: 44px;
+    position: relative;
+  }
+
+  .navbar__burger,
+  .navbar__burger::before,
+  .navbar__burger::after {
+    position: absolute;
+    left: 10px;
+    width: 24px;
+    height: 2px;
+    background-color: $color-dark;
+    transition: transform $transition-base;
+  }
+
+  .navbar__burger {
+    top: 21px;
+
+    &::before,
+    &::after {
+      content: '';
+      left: 0;
+    }
+
+    &::before {
+      top: -7px;
+    }
+
+    &::after {
+      top: 7px;
+    }
+  }
+
+  @include down(lg) {
+    .navbar__inner {
+      flex-wrap: wrap;
+    }
+
+    .navbar__toggle {
+      display: block;
+    }
+
+    .navbar__nav {
+      display: none;
+      flex-basis: 100%;
+      flex-direction: column;
+      align-items: flex-start;
+      padding-bottom: 16px;
+    }
+
+    .navbar__list {
+      flex-direction: column;
+    }
+
+    .navbar__toggle[aria-expanded='true'] {
+      .navbar__burger {
+        background-color: transparent;
+
+        &::before {
+          transform: translateY(7px) rotate(45deg);
+        }
+
+        &::after {
+          transform: translateY(-7px) rotate(-45deg);
+        }
+      }
+
+      & ~ .navbar__nav {
+        display: flex;
+      }
+    }
+  }
+</style>

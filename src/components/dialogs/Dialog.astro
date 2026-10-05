@@ -1,0 +1,115 @@
+---
+/**
+ * Базовое модальное окно на нативном <dialog>.
+ * Открывается кнопкой с data-dialog-open="<id>" (см. scripts/dialogs.ts).
+ */
+import { Image } from 'astro:assets';
+import background from '@/assets/images/backgrounds/modal.jpg';
+
+interface Props {
+  id: string;
+  title: string;
+  /** Иллюстрация в левом нижнем углу окна. */
+  decoration?: ImageMetadata | undefined;
+}
+
+const { id, title, decoration } = Astro.props;
+const titleId = `${id}-title`;
+---
+
+<dialog
+  class="dialog"
+  id={id}
+  aria-labelledby={titleId}
+  style={`--dialog-bg: url(${background.src})`}
+>
+  <div class="dialog__panel">
+    <button class="dialog__close" type="button" data-dialog-close aria-label="Закрыть">
+      &times;
+    </button>
+    <div class="dialog__aside">
+      <slot name="aside" />
+    </div>
+    <div class="dialog__body">
+      <h2 class="dialog__title" id={titleId}>
+        {title}
+      </h2>
+      <slot />
+    </div>
+    {decoration && <Image class="dialog__decoration" src={decoration} alt="" width={430} />}
+  </div>
+</dialog>
+
+<style lang="scss">
+  .dialog {
+    width: min(850px, calc(100% - 2 * $container-gutter));
+    max-height: calc(100% - 2 * $container-gutter);
+    margin: auto;
+    padding: 0;
+    border: none;
+    background: transparent;
+    overflow: visible;
+
+    &::backdrop {
+      background-color: $color-overlay;
+    }
+  }
+
+  .dialog__panel {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    min-height: 648px;
+    padding: 70px;
+    background: $color-white var(--dialog-bg) center / cover no-repeat;
+    overflow: hidden;
+
+    @include down(md) {
+      grid-template-columns: 1fr;
+      min-height: auto;
+      padding: 60px 24px 32px;
+    }
+  }
+
+  .dialog__close {
+    position: absolute;
+    top: 0;
+    left: 15px;
+    font-size: 50px;
+    line-height: 1;
+  }
+
+  .dialog__aside {
+    position: relative;
+    z-index: 1;
+    padding-top: 30px;
+
+    @include down(md) {
+      display: none;
+    }
+  }
+
+  .dialog__body {
+    position: relative;
+    z-index: 1;
+  }
+
+  .dialog__title {
+    margin-bottom: 25px;
+    font-size: 45px;
+    font-weight: $font-weight-bold;
+    line-height: 1;
+  }
+
+  .dialog__decoration {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    max-width: 50%;
+
+    @include down(md) {
+      display: none;
+    }
+  }
+</style>

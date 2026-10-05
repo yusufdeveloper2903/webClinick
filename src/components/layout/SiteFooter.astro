@@ -1,0 +1,92 @@
+---
+import { Image } from 'astro:assets';
+import logo from '@/assets/images/brand/logo.png';
+import ContactList from './ContactList.astro';
+import { mainNav, routes } from '@/config/navigation';
+import { site } from '@/config/site';
+
+const half = Math.ceil(mainNav.length / 2);
+const navColumns = [mainNav.slice(0, half), mainNav.slice(half)];
+const year = new Date().getFullYear();
+const years = year > site.foundedYear ? `${site.foundedYear}–${year}` : String(year);
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__top">
+      <a href={routes.home} aria-label={`${site.name} — на главную`}>
+        <Image src={logo} alt="" height={87} />
+      </a>
+
+      <nav class="site-footer__nav" aria-label="Навигация в подвале">
+        {navColumns.map((column) => (
+          <ul class="site-footer__column">
+            {column.map((item) => (
+              <li>
+                <a class="site-footer__link" href={item.href}>
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        ))}
+      </nav>
+
+      <ContactList class="site-footer__contacts" />
+    </div>
+
+    <p class="site-footer__copyright">
+      © {years} {site.name}. Все права защищены.
+    </p>
+  </div>
+</footer>
+
+<style lang="scss">
+  .site-footer {
+    margin-top: 130px;
+    padding-block: 40px;
+    background-color: $color-surface-alt;
+  }
+
+  .site-footer__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 40px 50px;
+  }
+
+  .site-footer__nav {
+    display: flex;
+    gap: 50px;
+  }
+
+  .site-footer__column {
+    display: grid;
+    gap: 10px;
+  }
+
+  .site-footer__link {
+    font-weight: $font-weight-medium;
+    color: $color-dark;
+    transition: color $transition-slow;
+
+    &:hover {
+      color: $color-accent;
+    }
+  }
+
+  .site-footer__top :global(.site-footer__contacts) {
+    flex: 1;
+    justify-content: space-between;
+  }
+
+  .site-footer__copyright {
+    margin-top: 50px;
+    font-size: $font-size-sm;
+    text-align: end;
+
+    @include down(md) {
+      text-align: start;
+    }
+  }
+</style>

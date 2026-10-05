@@ -1,0 +1,86 @@
+---
+import { Image } from 'astro:assets';
+import heroWoman from '@/assets/images/about/hero-woman.png';
+import pawTrail from '@/assets/images/about/paw-trail.png';
+import magnifier from '@/assets/images/about/magnifier.png';
+---
+
+<section class="about-hero">
+  <div class="container about-hero__inner">
+    <div class="about-hero__content">
+      <h1 class="about-hero__title">О клинике</h1>
+      <p class="about-hero__lead">
+        Собака, кошка, попугай, шиншилла… Сколько радости и тепла приносят эти весёлые друзья в наш
+        дом.
+      </p>
+      <Image class="about-hero__paws" src={pawTrail} alt="" />
+      <Image class="about-hero__magnifier" src={magnifier} alt="" />
+    </div>
+    <Image
+      class="about-hero__image"
+      src={heroWoman}
+      alt="Девушка обнимает собаку"
+      width={435}
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
+</section>
+
+<style lang="scss">
+  .about-hero {
+    padding-top: 20px;
+    overflow: hidden;
+  }
+
+  .about-hero__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+
+    @include down(md) {
+      flex-direction: column;
+    }
+  }
+
+  .about-hero__content {
+    position: relative;
+    max-width: 560px;
+    padding-bottom: 200px;
+
+    @include down(md) {
+      padding-bottom: 0;
+    }
+  }
+
+  .about-hero__title {
+    @include page-title;
+
+    margin-bottom: 15px;
+  }
+
+  .about-hero__lead {
+    font-size: $font-size-lg;
+    color: $color-muted;
+  }
+
+  .about-hero__paws {
+    position: absolute;
+    top: 53%;
+    left: 0;
+  }
+
+  .about-hero__magnifier {
+    position: absolute;
+    top: 80%;
+    right: -30%;
+  }
+
+  .about-hero__paws,
+  .about-hero__magnifier {
+    @include down(md) {
+      display: none;
+    }
+  }
+</style>

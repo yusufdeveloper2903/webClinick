@@ -1,0 +1,68 @@
+---
+import { Image } from 'astro:assets';
+import cardPaw from '@/assets/images/services/card-paw.png';
+import Button from '@/components/ui/Button.astro';
+import { routes } from '@/config/navigation';
+import type { Service } from '@/lib/content';
+
+interface Props {
+  service: Service;
+  variant?: 'accent' | 'secondary';
+}
+
+const { service, variant = 'accent' } = Astro.props;
+const { title, excerpt, icon } = service.data;
+---
+
+<article class="service-card">
+  <div class="service-card__media">
+    <Image src={icon} alt="" height={78} />
+    <Image class="service-card__paw" src={cardPaw} alt="" width={95} />
+  </div>
+  <h2 class="service-card__title">{title}</h2>
+  <p class="service-card__excerpt">{excerpt}</p>
+  <Button href={routes.service(service.id)} variant={variant} class="service-card__action">
+    Узнать больше<span class="visually-hidden">: {title}</span>
+  </Button>
+</article>
+
+<style lang="scss">
+  .service-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+    padding: 20px;
+    background-color: $color-surface;
+    border-radius: $radius-md $radius-md 0 0;
+    transition: box-shadow $transition-slow;
+
+    &:hover {
+      box-shadow: $shadow-card;
+    }
+  }
+
+  .service-card__media {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .service-card__title {
+    font-size: 32px;
+    font-weight: $font-weight-semibold;
+    line-height: 1.05;
+    hyphens: auto;
+  }
+
+  .service-card__excerpt {
+    flex: 1;
+    padding-bottom: 40px;
+    color: $color-muted;
+  }
+
+  .service-card :global(.service-card__action) {
+    align-self: flex-start;
+  }
+</style>

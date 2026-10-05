@@ -1,0 +1,50 @@
+---
+import { Image } from 'astro:assets';
+import home from '@/assets/images/about/home.png';
+---
+
+<section class="about-care">
+  <div class="container container--wide about-care__inner">
+    <Image class="about-care__image" src={home} alt="Уютный дом для питомца" width={705} />
+    <p class="about-care__text">
+      Принимая решение о том, чтобы завести <span class="text-accent">домашнего любимца</span>, или
+      уже имея его, мы не должны забывать, что животное — это живой организм, который требует не
+      только нашей любви, но и заботы о его здоровье и внешнем виде.{' '}
+      <span class="text-accent">Ответственность</span> хозяина заключается в чётком выполнении
+      правил по уходу за животным, своевременном обращении к врачу за консультацией и помощью в
+      решении любого вопроса. Ведь мы в ответе за тех, кого приручили!
+    </p>
+  </div>
+</section>
+
+<style lang="scss">
+  .about-care {
+    padding-bottom: 70px;
+    background-color: $color-white;
+    overflow: hidden;
+  }
+
+  .about-care__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+
+    @include down(lg) {
+      flex-direction: column;
+    }
+  }
+
+  .about-care__image {
+    flex: 0 1 600px;
+    min-width: 0;
+  }
+
+  .about-care__text {
+    flex: 1 1 560px;
+    max-width: 640px;
+    font-size: $font-size-xl;
+    line-height: 1.3;
+    color: $color-muted;
+  }
+</style>

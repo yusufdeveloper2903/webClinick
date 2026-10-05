@@ -1,0 +1,71 @@
+---
+/**
+ * Hero-блок внутренних страниц: заголовок, лид-абзац, иллюстрация справа.
+ * Дополнительный контент (кнопки, контакты) передаётся через слот по умолчанию.
+ */
+import { Image } from 'astro:assets';
+
+interface Props {
+  title: string;
+  lead?: string | undefined;
+  image?: ImageMetadata | undefined;
+  imageAlt?: string | undefined;
+}
+
+const { title, lead, image, imageAlt = '' } = Astro.props;
+---
+
+<section class="page-hero">
+  <div class="container page-hero__inner">
+    <div class="page-hero__content">
+      <h1 class="page-hero__title">
+        <slot name="title">{title}</slot>
+      </h1>
+      {lead && <p class="page-hero__lead">{lead}</p>}
+      <slot />
+    </div>
+    {image && (
+      <div class="page-hero__media">
+        <Image src={image} alt={imageAlt} loading="eager" fetchpriority="high" />
+      </div>
+    )}
+  </div>
+</section>
+
+<style lang="scss">
+  .page-hero {
+    padding-block: 60px;
+  }
+
+  .page-hero__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+
+    @include down(md) {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  .page-hero__content {
+    flex: 1 1 500px;
+    max-width: 560px;
+  }
+
+  .page-hero__title {
+    @include page-title;
+  }
+
+  .page-hero__lead {
+    margin-block: 20px 35px;
+    font-size: $font-size-lg;
+    line-height: 1.15;
+    color: $color-muted;
+  }
+
+  .page-hero__media {
+    flex: 0 1 470px;
+  }
+</style>

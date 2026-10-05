@@ -1,0 +1,48 @@
+@use '../abstracts' as *;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: 1.25;
+  color: $color-dark;
+  background-color: $color-bg;
+  overflow-x: hidden;
+}
+
+main {
+  flex: 1;
+}
+
+:focus-visible {
+  @include focus-ring;
+}
+
+.container {
+  width: 100%;
+  max-width: calc($container-width + 2 * $container-gutter);
+  margin-inline: auto;
+  padding-inline: $container-gutter;
+
+  &--wide {
+    max-width: calc($container-wide-width + 2 * $container-gutter);
+  }
+}
+
+.visually-hidden {
+  @include visually-hidden;
+}
+
+.text-accent {
+  color: $color-accent;
+}
+
+.text-secondary {
+  color: $color-link;
+}

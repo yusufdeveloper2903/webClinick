@@ -1,0 +1,107 @@
+---
+import { Image } from 'astro:assets';
+import grooming1 from '@/assets/images/about/grooming-1.png';
+import grooming2 from '@/assets/images/about/grooming-2.png';
+import grooming3 from '@/assets/images/about/grooming-3.png';
+import CarouselButton from '@/components/ui/CarouselButton.astro';
+
+const slides = [
+  { image: grooming1, alt: 'Грумер сушит шерсть собаки' },
+  { image: grooming2, alt: 'Стрижка питомца в кабинете грумера' },
+  { image: grooming3, alt: 'Питомец после груминга' },
+];
+---
+
+<section class="grooming" data-carousel="gallery">
+  <div class="container grooming__inner">
+    <div class="grooming__content">
+      <h2 class="grooming__title">
+        Хочешь подстричь <span class="text-accent">питомца?</span>
+      </h2>
+      <p class="grooming__text">
+        В лечебнице работает кабинет грумера, после посещения которого Ваш любимец будет особенно
+        неотразим и привлекателен.
+      </p>
+      <div class="grooming__controls">
+        <CarouselButton direction="prev" />
+        <CarouselButton direction="next" />
+        <span class="grooming__counter" data-carousel-counter aria-live="polite">
+          1 / {slides.length}
+        </span>
+      </div>
+    </div>
+
+    <div class="swiper grooming__slider">
+      <ul class="swiper-wrapper">
+        {slides.map(({ image, alt }) => (
+          <li class="swiper-slide grooming__slide">
+            <Image src={image} alt={alt} height={350} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initCarousels } from '@/scripts/carousel';
+
+  initCarousels();
+</script>
+
+<style lang="scss">
+  .grooming {
+    padding-block: 70px;
+    overflow: hidden;
+  }
+
+  .grooming__inner {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+
+    @include down(lg) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  .grooming__content {
+    flex: 0 0 40%;
+  }
+
+  .grooming__title {
+    font-size: 35px;
+    font-weight: $font-weight-bold;
+    line-height: 1.15;
+  }
+
+  .grooming__text {
+    margin-block: 20px 50px;
+    font-size: $font-size-lg;
+    color: $color-muted;
+  }
+
+  .grooming__controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .grooming__counter {
+    margin-left: 24px;
+    font-size: 25px;
+    font-weight: $font-weight-bold;
+  }
+
+  .grooming__slider {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .grooming__slide img {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+  }
+</style>

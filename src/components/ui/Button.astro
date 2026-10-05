@@ -1,0 +1,96 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { Image } from 'astro:assets';
+
+type Variant = 'accent' | 'dark' | 'secondary';
+
+interface BaseProps {
+  variant?: Variant;
+  icon?: ImageMetadata | undefined;
+  class?: string | undefined;
+}
+
+/** С `href` рендерится ссылка, без него — <button type="button">. */
+type Props = BaseProps &
+  (
+    | ({ href: string } & Omit<HTMLAttributes<'a'>, 'class'>)
+    | ({ href?: never } & Omit<HTMLAttributes<'button'>, 'class'>)
+  );
+
+const { variant = 'accent', icon, class: className, ...rest } = Astro.props;
+const classes = ['btn', `btn--${variant}`, className];
+// Astro не перезаписывает повторяющиеся атрибуты, поэтому type по умолчанию подставляем заранее.
+const buttonAttrs = { type: 'button', ...rest } as HTMLAttributes<'button'>;
+---
+
+{rest.href ? (
+  <a class:list={classes} {...(rest as HTMLAttributes<'a'>)}>
+    {icon && <Image class="btn__icon" src={icon} alt="" width={20} />}
+    <slot />
+  </a>
+) : (
+  <button class:list={classes} {...buttonAttrs}>
+    {icon && <Image class="btn__icon" src={icon} alt="" width={20} />}
+    <slot />
+  </button>
+)}
+
+<style lang="scss">
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 30px;
+    font-size: $font-size-base;
+    font-weight: $font-weight-medium;
+    line-height: 1.3;
+    text-align: center;
+    border: 2px solid transparent;
+    border-radius: $radius-sm;
+    transition:
+      background-color $transition-slow,
+      color $transition-slow,
+      border-color $transition-slow;
+
+    &:disabled {
+      cursor: progress;
+      opacity: 0.6;
+    }
+
+    &--accent {
+      color: $color-dark;
+      background-color: $color-accent;
+
+      &:hover {
+        color: $color-white;
+        background-color: $color-dark;
+      }
+    }
+
+    &--dark {
+      color: $color-white;
+      background-color: $color-dark;
+
+      &:hover {
+        color: $color-black;
+        background-color: $color-accent;
+      }
+    }
+
+    &--secondary {
+      color: $color-white;
+      background-color: $color-secondary;
+
+      &:hover {
+        color: $color-secondary;
+        background-color: $color-white;
+        border-color: $color-secondary;
+      }
+    }
+  }
+
+  .btn__icon {
+    flex-shrink: 0;
+  }
+</style>

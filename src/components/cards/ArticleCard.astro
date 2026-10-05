@@ -1,0 +1,75 @@
+---
+import { Image } from 'astro:assets';
+import ReadMoreLink from '@/components/ui/ReadMoreLink.astro';
+import { routes } from '@/config/navigation';
+import type { Article } from '@/lib/content';
+import { formatDate, toISODate } from '@/lib/format';
+
+interface Props {
+  article: Article;
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { article, headingLevel: Heading = 'h3' } = Astro.props;
+const { title, excerpt, date, cover } = article.data;
+---
+
+<article class="article-card">
+  <Image class="article-card__cover" src={cover} alt="" width={270} height={180} />
+  <div class="article-card__body">
+    <time class="article-card__date" datetime={toISODate(date)}>
+      {formatDate(date)}
+    </time>
+    <Heading class="article-card__title">{title}</Heading>
+    <p class="article-card__excerpt">{excerpt}</p>
+    <ReadMoreLink href={routes.article(article.id)} label={title} />
+  </div>
+</article>
+
+<style lang="scss">
+  .article-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: $color-surface;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    overflow: hidden;
+
+    @include hover-lift;
+  }
+
+  .article-card__cover {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+  }
+
+  .article-card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 20px 20px;
+  }
+
+  .article-card__date {
+    align-self: flex-end;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-muted;
+  }
+
+  .article-card__title {
+    font-size: 22px;
+    font-weight: $font-weight-bold;
+    line-height: 1.15;
+    color: $color-black;
+  }
+
+  .article-card__excerpt {
+    flex: 1;
+    margin-bottom: 20px;
+    color: $color-muted;
+  }
+</style>

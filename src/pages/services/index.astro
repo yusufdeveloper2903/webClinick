@@ -1,0 +1,34 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/ui/PageHero.astro';
+import ServiceCard from '@/components/cards/ServiceCard.astro';
+import heroParrot from '@/assets/images/services/hero-parrot.png';
+import { getServices } from '@/lib/content';
+
+const services = await getServices();
+const lead =
+  'Узнать информацию о наших услугах, записаться на приём к врачу или проконсультироваться вы можете по телефону, в любое удобное для вас время.';
+---
+
+<BaseLayout title="Наши услуги" description={lead} background="paws">
+  <PageHero title="Наши услуги" lead={lead} image={heroParrot} />
+
+  <section class="container" aria-label="Список услуг">
+    <ul class="services-grid">
+      {services.map((service, index) => (
+        <li>
+          <ServiceCard service={service} variant={index % 2 === 0 ? 'accent' : 'secondary'} />
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>
+
+<style lang="scss">
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 60px;
+  }
+</style>
